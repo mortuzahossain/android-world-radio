@@ -4,7 +4,7 @@ android {
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.wordpress.mortuza99.worldradio"
-        minSdkVersion 15
+        minSdkVersion 16
         targetSdkVersion 28
         versionCode 1
         versionName "1.0"
@@ -30,13 +30,16 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 
-    // Firebase
+    // Fire Base
     implementation 'com.google.firebase:firebase-core:16.0.1'
     implementation 'com.google.firebase:firebase-database:16.0.1'
 
+    // Fire Base Login
+    implementation 'com.google.firebase:firebase-auth:16.0.2'
+    implementation 'com.firebaseui:firebase-ui-auth:4.0.0'
+
     // For Image Downloading
     implementation 'com.squareup.picasso:picasso:2.71828'
-    implementation 'com.android.volley:volley:1.1.1'
 
     // Exo Player
     implementation 'com.google.android.exoplayer:exoplayer:r2.5.2'

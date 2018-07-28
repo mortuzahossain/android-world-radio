@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">World Radio</string>
+    <string name="open" />
+    <string name="close" />
+</resources>

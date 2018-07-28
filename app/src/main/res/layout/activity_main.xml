@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+    <android.support.v4.widget.DrawerLayout
+        android:id="@+id/drawer_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <!-- The main content view -->
+
+        <LinearLayout
+            android:id="@+id/content_frame"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:orientation="vertical">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/mainRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+        <!-- The navigation drawer -->
+
+        <LinearLayout
+            android:id="@+id/left_drawer"
+            android:layout_width="240dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:background="#FFFFFF"
+            android:divider="@android:color/transparent"
+            android:dividerHeight="0dp"
+            android:orientation="vertical">
+
+            <ListView
+                android:id="@+id/countryNames"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:choiceMode="singleChoice" />
+        </LinearLayout>
+    </android.support.v4.widget.DrawerLayout>
+</android.support.constraint.ConstraintLayout>

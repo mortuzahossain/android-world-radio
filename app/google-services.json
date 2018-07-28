@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "889440807817",
+    "firebase_url": "https://weblearn-4c3d4.firebaseio.com",
+    "project_id": "weblearn-4c3d4"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:889440807817:android:47864ab8ccc565bc",
+        "android_client_info": {
+          "package_name": "com.wordpress.mortuza99.worldradio"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "889440807817-aovoq207iham1o24iimlhdcsc8300kgh.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wordpress.mortuza99.worldradio",
+            "certificate_hash": "691e4af5e5b161877c756126c25b451aed3a3c75"
+          }
+        },
+        {
+          "client_id": "889440807817-q1u17dg48vq0penbmb20avrdcb5alhdr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDMJEkqRMABT84-q6evYT1Phs02ciQZLmE"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "889440807817-q1u17dg48vq0penbmb20avrdcb5alhdr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

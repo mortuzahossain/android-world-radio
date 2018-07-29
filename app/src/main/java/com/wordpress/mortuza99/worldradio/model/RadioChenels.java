@@ -1,25 +1,17 @@
 package com.wordpress.mortuza99.worldradio.model;
 
 public class RadioChenels {
-    String name;
     String image;
-    String streamUrl;
-
-    public RadioChenels(String name, String image, String streamUrl) {
-        this.name = name;
-        this.image = image;
-        this.streamUrl = streamUrl;
-    }
+    String name;
+    String url;
 
     public RadioChenels() {
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
+    public RadioChenels(String image, String name, String url) {
+        this.image = image;
         this.name = name;
+        this.url = url;
     }
 
     public String getImage() {
@@ -30,11 +22,19 @@ public class RadioChenels {
         this.image = image;
     }
 
-    public String getStreamUrl() {
-        return streamUrl;
+    public String getName() {
+        return name;
     }
 
-    public void setStreamUrl(String streamUrl) {
-        this.streamUrl = streamUrl;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
     }
 }

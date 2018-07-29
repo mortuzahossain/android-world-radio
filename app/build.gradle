@@ -7,7 +7,8 @@ android {
         minSdkVersion 16
         targetSdkVersion 28
         versionCode 1
-        versionName "1.0"
+        versionName "0.0.1"
+        multiDexEnabled true
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -18,12 +19,15 @@ android {
     }
 }
 
+apply plugin: 'com.google.gms.google-services'
+
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     //noinspection GradleCompatible
-    implementation 'com.android.support:appcompat-v7:28.0.0-alpha1'
-    implementation 'com.android.support:recyclerview-v7:28.0.0-alpha1'
-    implementation 'com.android.support:cardview-v7:28.0.0-alpha1'
+    implementation 'com.android.support:appcompat-v7:28.0.0-alpha3'
+    implementation 'com.android.support:recyclerview-v7:28.0.0-alpha3'
+    implementation 'com.android.support:cardview-v7:28.0.0-alpha3'
+    implementation 'com.android.support:design:28.0.0-alpha3'
 
     implementation 'com.android.support.constraint:constraint-layout:1.1.2'
     testImplementation 'junit:junit:4.12'
@@ -38,6 +42,9 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:16.0.2'
     implementation 'com.firebaseui:firebase-ui-auth:4.0.0'
 
+    // Fire Base Push Notification
+    implementation 'com.google.firebase:firebase-messaging:17.1.0'
+
     // For Image Downloading
     implementation 'com.squareup.picasso:picasso:2.71828'
 
@@ -47,4 +54,4 @@ dependencies {
     // Circular Image View
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 }
-apply plugin: 'com.google.gms.google-services'
+

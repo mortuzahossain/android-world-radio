@@ -35,7 +35,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
-    ArrayList<String> countryNames = new ArrayList<>();
+    static ArrayList<String> countryNames = new ArrayList<>();
     static List<RadioChenels> radioChenelsList = new ArrayList<>();
     final static String TAG = "ddd";
 
@@ -57,9 +57,34 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // TODO : LOGIN
-        firebaseAuth = FirebaseAuth.getInstance();
+        // TODO : ADD LOADER UNTIL LOAD DATA IN RECYCLE VIEW
 
+        firebaseAuth = FirebaseAuth.getInstance();
+        authStateListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    UserSignedIn();
+                } else {
+                    // User Signed Out
+                    startActivityForResult(
+                            AuthUI.getInstance()
+                                    .createSignInIntentBuilder()
+                                    .setLogo(R.drawable.ic_launcher_web)
+                                    .setAvailableProviders(Arrays.asList(
+                                            new AuthUI.IdpConfig.GoogleBuilder().build(),
+                                            new AuthUI.IdpConfig.EmailBuilder().build(),
+                                            new AuthUI.IdpConfig.PhoneBuilder().build()))
+                                    .build(),
+                            RC_SIGN_IN);
+                }
+            }
+        };
+
+    }
+
+    private void UserSignedIn() {
 
         drawerLayout = findViewById(R.id.drawer_layout);
         recyclerView = findViewById(R.id.mainRecyclerView);
@@ -95,7 +120,7 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(View v, int position) {
                 String name = radioChenelsList.get(position).getName();
                 String imageUrl = radioChenelsList.get(position).getImage();
-                String streamUrl = radioChenelsList.get(position).getStreamUrl();
+                String streamUrl = radioChenelsList.get(position).getUrl();
 
                 startActivity(new Intent(getApplicationContext(), Player.class)
                         .putExtra("NAME", name)
@@ -105,36 +130,13 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-        authStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User Signed In
-                    Toast.makeText(getApplicationContext(),"Thanks "+user.getDisplayName()+" For Signing In",Toast.LENGTH_LONG).show();
-                } else {
-                    // User Signed Out
-                    startActivityForResult(
-                            AuthUI.getInstance()
-                                    .createSignInIntentBuilder()
-                                    .setAvailableProviders(Arrays.asList(
-                                            new AuthUI.IdpConfig.GoogleBuilder().build(),
-                                            new AuthUI.IdpConfig.EmailBuilder().build(),
-                                            new AuthUI.IdpConfig.PhoneBuilder().build()))
-                                    .build(),
-                            RC_SIGN_IN);
-                }
-            }
-        };
-
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RC_SIGN_IN && resultCode == RESULT_CANCELED){
-            Toast.makeText(getApplicationContext(),"Sign in Canceled.",Toast.LENGTH_LONG).show();
+        if (requestCode == RC_SIGN_IN && resultCode == RESULT_CANCELED) {
+            Toast.makeText(getApplicationContext(), "Sign in Canceled.", Toast.LENGTH_LONG).show();
             finish();
         }
     }
@@ -156,11 +158,10 @@ public class MainActivity extends AppCompatActivity {
         single_item_ref.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                Log.d(TAG, "" + dataSnapshot.getChildrenCount());
                 radioChenelsList.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     RadioChenels radioChenels = ds.getValue(RadioChenels.class);
-                    radioChenelsList.add(new RadioChenels(radioChenels.getName(), radioChenels.getImage(), radioChenels.getStreamUrl()));
+                    radioChenelsList.add(new RadioChenels(radioChenels.getImage(),radioChenels.getName(),radioChenels.getUrl()));
                 }
                 myRecyclerAdapter.notifyDataSetChanged();
             }
@@ -173,6 +174,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addOnList() {
+        countryNames.clear();
         refRadioStations.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

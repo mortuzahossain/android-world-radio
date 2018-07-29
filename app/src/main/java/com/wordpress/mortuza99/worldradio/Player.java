@@ -51,6 +51,7 @@ public class Player extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_player);
 
+        getSupportActionBar().hide();
 
         circleImageView = findViewById(R.id.image);
         playBtn = findViewById(R.id.btnPlay);
@@ -60,7 +61,6 @@ public class Player extends AppCompatActivity {
         String nameVal = getIntent().getStringExtra("NAME");
         String imageUrlVal = getIntent().getStringExtra("IMAGE");
         String streamUrlVal = getIntent().getStringExtra("STREAMURL");
-        streamUrlVal = "http://66.45.232.131:9994/;stream/1/";
 
         // Setting The Name in the text view
         name.setText(nameVal);

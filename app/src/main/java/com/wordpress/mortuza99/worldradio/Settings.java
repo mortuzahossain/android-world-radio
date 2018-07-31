@@ -41,7 +41,12 @@ public class Settings extends AppCompatActivity {
             public void onClick(View view) {
                 sharedPreferences = getSharedPreferences(SHARED_NAME, Context.MODE_PRIVATE);
                 editor = sharedPreferences.edit();
-                editor.putString("DEFAULTNAME", COUNTRY_NAMES.get(countrySelector.getSelectedItemPosition()));
+                try {
+                    editor.putString("DEFAULTNAME", COUNTRY_NAMES.get(countrySelector.getSelectedItemPosition()));
+                } catch (Exception e) {
+                    Snackbar.make(view, "Please wail until data sync in main page. Please go back to main menu.", Snackbar.LENGTH_LONG)
+                            .setAction("Action", null).show();
+                }
                 editor.commit();
                 Snackbar.make(view, "Setting is Saved.", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();

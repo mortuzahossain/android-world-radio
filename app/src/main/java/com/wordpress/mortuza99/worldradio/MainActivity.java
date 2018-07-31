@@ -1,12 +1,16 @@
 package com.wordpress.mortuza99.worldradio;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.support.annotation.NonNull;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.GridLayoutManager;
@@ -63,27 +67,53 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         firebaseAuth = FirebaseAuth.getInstance();
-        authStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    UserSignedIn();
-                } else {
-                    // User Signed Out
-                    startActivityForResult(
-                            AuthUI.getInstance()
-                                    .createSignInIntentBuilder()
-                                    .setLogo(R.drawable.ic_launcher_web)
-                                    .setAvailableProviders(Arrays.asList(
-                                            new AuthUI.IdpConfig.GoogleBuilder().build(),
-                                            new AuthUI.IdpConfig.EmailBuilder().build()))
-                                    .build(),
-                            RC_SIGN_IN);
-                }
-            }
-        };
 
+        // Check For Internet Connection
+        if (isOnline()) {
+            authStateListener = new FirebaseAuth.AuthStateListener() {
+                @Override
+                public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                    FirebaseUser user = firebaseAuth.getCurrentUser();
+                    if (user != null) {
+                        UserSignedIn();
+                    } else {
+                        startActivityForResult(
+                                AuthUI.getInstance()
+                                        .createSignInIntentBuilder()
+                                        .setLogo(R.drawable.ic_launcher_web)
+                                        .setAvailableProviders(Arrays.asList(
+                                                new AuthUI.IdpConfig.GoogleBuilder().build(),
+                                                new AuthUI.IdpConfig.EmailBuilder().build()))
+                                        .build(),
+                                RC_SIGN_IN);
+                    }
+                }
+            };
+        } else {
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Warning !!!");
+            builder.setMessage("Please connect your phone with internet.");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    startActivity(new Intent(android.provider.Settings.ACTION_WIRELESS_SETTINGS));
+                }
+            });
+            builder.setNegativeButton("No", null);
+            AlertDialog warning = builder.create();
+            warning.show();
+        }
+
+    }
+
+    private boolean isOnline() {
+        ConnectivityManager cm = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo netInfo = cm.getActiveNetworkInfo();
+        if (netInfo != null && netInfo.isConnectedOrConnecting()) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     private void UserSignedIn() {
@@ -171,7 +201,7 @@ public class MainActivity extends AppCompatActivity {
                 radioChenelsList.clear();
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
                     RadioChenels radioChenels = ds.getValue(RadioChenels.class);
-                    radioChenelsList.add(new RadioChenels(radioChenels.getImage(),radioChenels.getName(),radioChenels.getUrl()));
+                    radioChenelsList.add(new RadioChenels(radioChenels.getImage(), radioChenels.getName(), radioChenels.getUrl()));
                 }
                 myRecyclerAdapter.notifyDataSetChanged();
                 loader.setVisibility(View.GONE);
@@ -186,10 +216,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addOnList() {
-        countryNames.clear();
         refRadioStations.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                countryNames.clear();
                 ArrayAdapter<String> adapter = new ArrayAdapter<>(getApplicationContext(),
                         android.R.layout.simple_list_item_1, android.R.id.text1, countryNames);
                 for (DataSnapshot ds : dataSnapshot.getChildren()) {
@@ -215,7 +245,7 @@ public class MainActivity extends AppCompatActivity {
             return true;
         }
         if (item.getItemId() == R.id.setting) {
-            startActivity(new Intent(this,Settings.class).putExtra("COUNTRY_NAMES",countryNames));
+            startActivity(new Intent(this, Settings.class).putExtra("COUNTRY_NAMES", countryNames));
             return true;
         }
         return super.onOptionsItemSelected(item);

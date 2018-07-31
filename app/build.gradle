@@ -54,4 +54,3 @@ dependencies {
     // Circular Image View
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 }
-

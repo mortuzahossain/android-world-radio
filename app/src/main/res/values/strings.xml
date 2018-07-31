@@ -2,4 +2,8 @@
     <string name="app_name">World Radio</string>
     <string name="open" />
     <string name="close" />
+    <string name="settings">Settings</string>
+    <string name="log_out">Log Out</string>
+    <string name="add_your_default_country">Add Your Default Country</string>
+    <string name="save">Save</string>
 </resources>

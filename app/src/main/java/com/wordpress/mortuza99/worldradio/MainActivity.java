@@ -1,6 +1,8 @@
 package com.wordpress.mortuza99.worldradio;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.annotation.NonNull;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -39,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     static ArrayList<String> countryNames = new ArrayList<>();
     static List<RadioChenels> radioChenelsList = new ArrayList<>();
     final static String TAG = "ddd";
+    public static final String SHARED_NAME = "RadioStationsData";
 
     DrawerLayout drawerLayout;
     ActionBarDrawerToggle toggle;
@@ -57,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         firebaseAuth = FirebaseAuth.getInstance();
         authStateListener = new FirebaseAuth.AuthStateListener() {
@@ -93,7 +97,6 @@ public class MainActivity extends AppCompatActivity {
         toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open, R.string.close);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         // Fire Base Data Reading And Set in Navigation List
         DatabaseReference database = FirebaseDatabase.getInstance().getReference();
@@ -101,8 +104,12 @@ public class MainActivity extends AppCompatActivity {
         countryList = findViewById(R.id.countryNames);
 
         addOnList();
-        FetchData("Africa");
-        // Initial Data Load
+
+        // Retrieve Country Name From Shared Preference
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_NAME, Context.MODE_PRIVATE);
+        String DEFAULTNAME = sharedPreferences.getString("DEFAULTNAME", "Africa");
+        FetchData(DEFAULTNAME);
+
         countryList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -137,6 +144,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == RC_SIGN_IN && resultCode == RESULT_CANCELED) {
+            countryNames.clear();
+            radioChenelsList.clear();
             Toast.makeText(getApplicationContext(), "Sign in Canceled.", Toast.LENGTH_LONG).show();
             finish();
         }
@@ -203,6 +212,10 @@ public class MainActivity extends AppCompatActivity {
         }
         if (item.getItemId() == R.id.menuLogout) {
             AuthUI.getInstance().signOut(this);
+            return true;
+        }
+        if (item.getItemId() == R.id.setting) {
+            startActivity(new Intent(this,Settings.class).putExtra("COUNTRY_NAMES",countryNames));
             return true;
         }
         return super.onOptionsItemSelected(item);

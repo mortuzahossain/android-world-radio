@@ -35,18 +35,15 @@ public class Settings extends AppCompatActivity {
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         countrySelector.setAdapter(dataAdapter);
 
-        Button save = findViewById(R.id.btnSave);
+        final Button save = findViewById(R.id.btnSave);
         save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 sharedPreferences = getSharedPreferences(SHARED_NAME, Context.MODE_PRIVATE);
                 editor = sharedPreferences.edit();
-                try {
-                    editor.putString("DEFAULTNAME", COUNTRY_NAMES.get(countrySelector.getSelectedItemPosition()));
-                } catch (Exception e) {
-                    Snackbar.make(view, "Please wail until data sync in main page. Please go back to main menu.", Snackbar.LENGTH_LONG)
-                            .setAction("Action", null).show();
-                }
+                String saveText = COUNTRY_NAMES == null ? "Bangladesh" : COUNTRY_NAMES.get(countrySelector.getSelectedItemPosition());
+                editor.putString("DEFAULTNAME", saveText);
+
                 editor.commit();
                 Snackbar.make(view, "Setting is Saved.", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();

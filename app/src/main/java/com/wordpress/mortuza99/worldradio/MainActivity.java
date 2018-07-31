@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.firebase.ui.auth.AuthUI;
@@ -44,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
     ListView countryList;
 
     DatabaseReference refRadioStations;
-
+    ProgressBar loader;
     RecyclerView recyclerView;
     MyRecyclerAdapter myRecyclerAdapter;
 
@@ -56,8 +57,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        // TODO : ADD LOADER UNTIL LOAD DATA IN RECYCLE VIEW
 
         firebaseAuth = FirebaseAuth.getInstance();
         authStateListener = new FirebaseAuth.AuthStateListener() {
@@ -74,8 +73,7 @@ public class MainActivity extends AppCompatActivity {
                                     .setLogo(R.drawable.ic_launcher_web)
                                     .setAvailableProviders(Arrays.asList(
                                             new AuthUI.IdpConfig.GoogleBuilder().build(),
-                                            new AuthUI.IdpConfig.EmailBuilder().build(),
-                                            new AuthUI.IdpConfig.PhoneBuilder().build()))
+                                            new AuthUI.IdpConfig.EmailBuilder().build()))
                                     .build(),
                             RC_SIGN_IN);
                 }
@@ -85,6 +83,9 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void UserSignedIn() {
+
+        loader = findViewById(R.id.loader);
+        loader.setVisibility(View.VISIBLE);
 
         drawerLayout = findViewById(R.id.drawer_layout);
         recyclerView = findViewById(R.id.mainRecyclerView);
@@ -164,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
                     radioChenelsList.add(new RadioChenels(radioChenels.getImage(),radioChenels.getName(),radioChenels.getUrl()));
                 }
                 myRecyclerAdapter.notifyDataSetChanged();
+                loader.setVisibility(View.GONE);
             }
 
             @Override
@@ -171,6 +173,7 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "Error during adding station");
             }
         });
+
     }
 
     private void addOnList() {
